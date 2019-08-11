@@ -40,6 +40,8 @@ class Player(ABC):
             self.hand = drawCards(5, [])
 
     #given a building pile to put it on, puts out a card from the stock pile
+        #since self.stockPile.pop() removes last item, stock piles will be read
+        #from last to first - ie. last item in list will be 'on top' of stock pile
     def putOutCardFromStock(self, letter):
         print("- Added", self.stockPile[-1], "from Stock Pile to Building Pile", letter + ' -\n')
         buildingPiles[letter].append(self.stockPile[-1])
@@ -229,9 +231,6 @@ stock pile, 'h' for putting out a card from your hand, 'd' to put out card from 
                     except:
                         print("Please enter an integer")
 
-#computer players
-        #should check if can put out card from stock pile, then only check again if the player
-        #gets more cards
 class ComputerPlayer(Player):
     def takeTurn(self):
         print("\n****" + self.name + "'s turn****")
@@ -467,46 +466,6 @@ def doesListContainOneCard(pile): #returns false if list is empty or if the list
     else:
         return False
 
-#--ToDo--
-
-#fix decision computerPlayer - do you always want to put out as many cards as you can?
-
-#if there are no spare discardPiles, it quickly descends into 'put random cards anywhere', where
-    #instead it could put out cards onto a single pile that doesn't contain all of the same card
-    #ie. ruin only one pile and not the rest
-
-#also, don't need to check if the stock card can be put out each time if it's already established that you can't
-#it should run at the start of the turn, and only again in the same turn if the player gets new cards
-#if player gets new hand, or if a new stock card is turned over
-
-#if card from discard piles is being added to path, add the next card from that discard pile to available cards list
-
-#should i have different methods for putting out cards (from hand, from discard pile, etc) for both classes?
-#that way i could put more code in the methods, and have different spacing for each one
-
-#perhaps I should add decisions based on others' stock cards (ie. not helping them unless it interferes with
-    #putting out their own stock cards or getting rid of their full hand)
-#going further, could include discardPiles since those are visible to all players.
-
-#apart from to get to the stock card, what conditions would you put a W out?
-
-#need to change other functions that use discardPile in a roundabout (and bad runtime) way
-
-#try hand, discard pile, and discard from hand (computer) all end with checking each discard pile against the chosen card
-    #and if it can be put out, implementing the chosen function (eg. putOutCardFrom____)
-    #is that worth pursuing?
-
-#when picking a card to discard, you want to keep the cards immediately before your stock card if possible (eg. if stock card
-    #is 10, you'll want to keep any 9's you have in your hand
-
-    
-#maybe you can implement a hint system for the player
-#part of the 'can i put out the stock card' computerPlayer function could then be moved up into
-#Player and used there.
-
-#after testing is completed, get rid of unnecessary print statements in computer player class
-#eg. printing the hand at end of turn when the user shouldn't be able to see that
-
 #----main routine----
 
 #initial setup: cards and play area
@@ -549,6 +508,3 @@ while WinnerFound != True: #runs as long as the win condition (stockPile of a pl
 #after game
 print("********Game Over!********")
 print("The winner is", winner.name, '!!!')
-
-# since player1.stockPile.pop() removes last item, stock piles will be read
-#from last to first - ie. last item in list will be 'on top' of stock pile
